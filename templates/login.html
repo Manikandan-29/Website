@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - Student Database</title>
+        <link rel="icon" type="image/png" href="./img1.png">
+        <link rel="stylesheet" href="{{url_for('static', filename='login.css')}}">
+    </head>
+    
+    <body>
+        <div class="login-container">
+            <h1>Login</h1>
+            
+            <!-- Login Form -->
+            <form id="login-form" method="post">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter the password" required>
+                <button type="submit" name="action" value="login">Login</button>
+            </form>
+            
+            <!-- Set New Password Form -->
+            <form id="set-password-form" method="post">
+                <label for="new_password">New Password:</label>
+                <input type="password" id="new_password" name="new_password" placeholder="Enter New Password" required>
+                <button type="submit" name="action" value="set_password" class="btn1">Set New Password </button>
+            </form>
+            
+            <!-- Error Message Display -->
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+    
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                // Handle login form submission
+                $('#login-form').on('submit', function(event) {
+                    event.preventDefault();  // Prevent the default form submission
+                    const password = $('#password').val();
+                    $.post('/login', { password: password, action: 'login' }, function(response) {
+                        // On success, redirect to the index page
+                        window.location.href = '/';
+                        alert("successfully, take you to the main page. ")
+                    }).fail(function(xhr) {
+                        // On failure, show the error message
+                        alert('Your password does not match')
+                        $('.error').text(xhr.responseJSON.error);
+                    });
+                });
+    
+                // Handle set password form submission
+                $('#set-password-form').on('submit', function(event) {
+                    event.preventDefault();  // Prevent the default form submission
+                    const newPassword = $('#new_password').val();
+                    $.post('/login', { new_password: newPassword, action: 'set_password' }, function(response) {
+                        // On success, display a success message and optionally handle redirection
+                        alert('Password has been successfully updated');
+                        // Optionally, you can redirect to the login page or keep the user on the same page
+                        window.location.href = '/login';
+                    }).fail(function(xhr) {
+                        // On failure, show the error message
+                        alert("Kindly set a new password.")
+                        $('.error').text(xhr.responseJSON.error);
+                    });
+                });
+            });
+        </script>
+    </body>
+    </html>
