@@ -9,6 +9,12 @@ app.secret_key = '321'  # Change this to a secure key
 PASSWORD_FILE = 'password.csv'
 CSV_BASE_FILE = 'students_{}.csv'
 STAFF_CSV_BASE_FILE = 'staff_{}.csv'
+@app.route('/')
+def home():
+    return "app"
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000, debug=True)
 
 # Initialize the password file if it does not exist
 def init_password():
